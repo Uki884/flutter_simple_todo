@@ -1,4 +1,4 @@
-# ultimate_todo_app
+# flutter_simple_todo
 
 A new Flutter project.
 
