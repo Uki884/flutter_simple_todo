@@ -1,0 +1,284 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Qitta Prism Sample
+  description: A sample API for qiita.
+paths:
+  /schedules:
+    get:
+      description: |
+        すべての予定を取得します
+      operationId: findTodos
+      parameters:
+        - name: from
+          in: query
+          description: 予定の開始日
+          required: false
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: 予定の終了日
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功した場合
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schdule'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: 予定の新規作成
+      operationId: addSchedule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Schdule'
+      responses:
+        '200':
+          description: pet response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schdule'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /schedules/{schedule_id}:
+    get:
+      description: |
+        特定idの予定を取得します
+      operationId: findTodo
+      parameters:
+        - name: schedule_id
+          in: path
+          description: schedule_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 予定単一
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schdule'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /schedules/{schedule_id}/todos:
+    post:
+      description: |
+        スケジュールに紐づくTODOを作成します
+      operationId: addTodo
+      parameters:
+        - name: schedule_id
+          in: path
+          description: schedule_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功時
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /schedules/{schedule_id}/todos/{todo_id}:
+    get:
+      description: |
+        スケジュールに紐づくTODOを単一取得
+      operationId: addTodo
+      parameters:
+        - name: schedule_id
+          in: path
+          description: schedule_id
+          required: true
+          schema:
+            type: integer
+        - name: todo_id
+          in: path
+          description: todo_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功時
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /schedules/{schedule_id}/todos/{todo_id}/tasks/{task_id}:
+    get:
+      description: |
+        todoに紐づくタスクを取得します
+      operationId: findTasks
+      parameters:
+        - name: schedule_id
+          in: path
+          description: schedule_id
+          required: true
+          schema:
+            type: integer
+        - name: todo_id
+          in: path
+          description: todoのid
+          required: true
+          schema:
+            type: integer
+        - name: task_id
+          in: path
+          description: taskのid
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: タスク一覧
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /schedules/{schedule_id}/todos/{todo_id}/tasks:
+    post:
+      description: |
+        todoに紐づくタスクを作成します
+      operationId: findTasks
+      parameters:
+        - name: todo_id
+          in: path
+          description: todoのid
+          required: true
+          schema:
+            type: integer
+        - name: task_id
+          in: path
+          description: taskのid
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: タスク一覧
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Schdule:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        status:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        todos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Todo'
+
+    Todo:
+        type: object
+        required:
+          - content
+        properties:
+          id:
+            type: integer
+          content:
+            type: string
+          status:
+            type: string
+          created_at:
+            type: string
+          updated_at:
+            type: string
+          tasks:
+            type: array
+            items:
+              $ref: '#/components/schemas/Task'
+
+    Task:
+        type: object
+        required:
+          - content
+        properties:
+          id:
+            type: integer
+          content:
+            type: string
+          status:
+            type: string
+          created_at:
+            type: string
+          updated_at:
+            type: string
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

@@ -1,0 +1,15 @@
+{
+  "name": "simple-todo-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run:mockserver": "prism mock ./mock/openapi.yml"
+  },
+  "author": "Uki884 <mmmr0628@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@stoplight/prism-cli": "^4.6.1"
+  }
+}
